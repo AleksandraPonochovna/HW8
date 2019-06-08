@@ -19,12 +19,16 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public void add(T value) {
-        if (i == size) {
+        check(i);
+        add(value, i);
+        i++;
+    }
+
+    public void check(int i) {
+        if (i >= size) {
             size += DEFAULT_CAPACITY / 2;
             array = sizeCheck(array);
         }
-        add(value, i);
-        i++;
     }
 
     public Object[] sizeCheck(Object[] newArray) {
@@ -33,12 +37,9 @@ public class MyArrayList<T> implements List<T> {
         return newArray;
     }
 
-   @Override
+    @Override
     public void add(T value, int index) {
-        if (index >= size){
-            size += DEFAULT_CAPACITY / 2;
-            array = sizeCheck(array);
-        }
+        check(index);
         array[index] = value;
     }
 
@@ -97,4 +98,3 @@ public class MyArrayList<T> implements List<T> {
         return array;
     }
 }
-
