@@ -27,11 +27,11 @@ public class MyArrayList<T> implements List<T> {
     public void check(int i) {
         if (i >= size) {
             size += DEFAULT_CAPACITY / 2;
-            array = sizeCheck(array);
+            array = newArray(array);
         }
     }
 
-    public Object[] sizeCheck(Object[] newArray) {
+    public Object[] newArray(Object[] newArray) {
         newArray = new Object[size];
         System.arraycopy(array, 0, newArray, 0, i);
         return newArray;
@@ -47,7 +47,7 @@ public class MyArrayList<T> implements List<T> {
     public void addAll(List<T> list) {
         Object[] obj = list.toArray();
         size = obj.length;
-        array = sizeCheck(array);
+        array = newArray(array);
         System.arraycopy(obj, 0, this.array, 0, obj.length);
     }
 
