@@ -1,7 +1,6 @@
 package com.company;
 
 public interface List<T> {
-
     void add(T value);
 
     void add(T value, int index);
@@ -20,4 +19,5 @@ public interface List<T> {
 
     boolean isEmpty();
 
+    Object[] toArray();
 }
