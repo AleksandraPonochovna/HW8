@@ -3,8 +3,8 @@ package com.company;
 public class MyArrayList<T> implements List<T> {
 
     private static final int DEFAULT_CAPACITY = 10;
-    int i = 0;
-    Object[] array = new Object[DEFAULT_CAPACITY];
+    private int i = 0;
+    private Object[] array = new Object[DEFAULT_CAPACITY];
     StringBuilder stringBuilder = new StringBuilder();
     private int size;
 
