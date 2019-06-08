@@ -33,8 +33,12 @@ public class MyArrayList<T> implements List<T> {
         return newArray;
     }
 
-    @Override
+   @Override
     public void add(T value, int index) {
+        if (index >= size){
+            size += DEFAULT_CAPACITY / 2;
+            array = sizeCheck(array);
+        }
         array[index] = value;
     }
 
