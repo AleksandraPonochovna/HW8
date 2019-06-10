@@ -3,10 +3,10 @@ package com.company;
 public class MyArrayList<T> implements List<T> {
 
     private static final int DEFAULT_CAPACITY = 10;
-    private int i = 0;
+    private int position = 0;
     private Object[] array = new Object[DEFAULT_CAPACITY];
-    StringBuilder stringBuilder = new StringBuilder();
-    private int size;
+    private StringBuilder stringBuilder = new StringBuilder();
+    private int size = array.length;
 
     public void printArrayList() {
         System.out.println("My array list: ");
@@ -19,27 +19,28 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public void add(T value) {
-        check(i);
-        add(value, i);
-        i++;
+        check(position);
+        add(value, position);
+        position++;
     }
 
-    public void check(int i) {
+    private void check(int i) {
         if (i >= size) {
             size += DEFAULT_CAPACITY / 2;
             array = newArray(array);
         }
     }
 
-    public Object[] newArray(Object[] newArray) {
+    private Object[] newArray(Object[] newArray) {
         newArray = new Object[size];
-        System.arraycopy(array, 0, newArray, 0, i);
+        System.arraycopy(array, 0, newArray, 0, position);
         return newArray;
     }
 
     @Override
     public void add(T value, int index) {
         check(index);
+        System.arraycopy(array, index, array, index + 1, size - index - 1);
         array[index] = value;
     }
 
@@ -53,21 +54,23 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public T get(int index) {
-        return (T) array[index];
+        if (size > index) {
+            return (T) array[index];
+        }
+        return null;
     }
 
     @Override
     public void set(T value, int index) {
+        check(index);
         array[index] = value;
     }
 
     @Override
     public T remove(int index) {
-        size -= 1;
-        for (int j = index; j < size; j++) {
-            array[j] = array[j + 1];
-        }
-        return (T) array;
+        size--;
+        System.arraycopy(array, index + 1, array, index, size - index);
+        return (T) array[index];
     }
 
     @Override
@@ -87,10 +90,7 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean isEmpty() {
-        if (array[0] == null) {
-            return true;
-        }
-        return false;
+        return position == 0;
     }
 
     @Override
