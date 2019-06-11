@@ -44,6 +44,7 @@ public class MyArrayList<T> implements List<T> {
         check(index);
         System.arraycopy(array, index, array, index + 1, size - index - 1);
         array[index] = value;
+        size++;
     }
 
     @Override
