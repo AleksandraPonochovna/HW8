@@ -24,15 +24,17 @@ public class MyArrayList<T> implements List<T> {
         position++;
     }
 
-    private void check(int i) {
-        if (i >= size) {
-            size += DEFAULT_CAPACITY / 2;
-            array = newArray(array);
+    private void check(int index) {
+        if (index < 0 || index > position) {
+            if (index >= size) {
+                size += size / 2;
+                array = newArray();
+            }
         }
     }
 
-    private Object[] newArray(Object[] newArray) {
-        newArray = new Object[size];
+    private Object[] newArray() {
+        Object[] newArray = new Object[size];
         System.arraycopy(array, 0, newArray, 0, position);
         return newArray;
     }
@@ -47,14 +49,14 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public void addAll(List<T> list) {
         Object[] obj = list.toArray();
-        size = obj.length;
-        array = newArray(array);
+        size = array.length;
+        array = newArray();
         System.arraycopy(obj, 0, this.array, 0, obj.length);
     }
 
     @Override
     public T get(int index) {
-        if (size > index) {
+        if (position > index) {
             return (T) array[index];
         }
         return null;
@@ -76,7 +78,7 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public T remove(T t) {
         for (int j = 0; j < size; j++) {
-            if (array[j] == t) {
+            if (array[j].equals(t)) {
                 return remove(j);
             }
         }
@@ -85,7 +87,7 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public int size() {
-        return size;
+        return position;
     }
 
     @Override
@@ -98,3 +100,4 @@ public class MyArrayList<T> implements List<T> {
         return array;
     }
 }
+
