@@ -8,55 +8,46 @@ public class MyArrayList<T> implements List<T> {
     private StringBuilder stringBuilder = new StringBuilder();
     private int size = array.length;
 
-    public void printArrayList() {
-        System.out.println("My array list: ");
-        stringBuilder.setLength(0);
-        for (int j = 0; j < size; j++) {
-            stringBuilder.append(array[j]).append(", ");
-        }
-        System.out.println(stringBuilder);
-    }
-
     @Override
     public void add(T value) {
-        check(position);
+        checkForAdd(position);
         add(value, position);
-        position++;
     }
 
-    private void check(int index) {
-        if (index < 0 || index > position) {
-            if (index >= size) {
-                size += size / 2;
-                array = newArray();
-            }
+    private void checkForAdd(int index) {
+        if (index < 0) {
+            throw new NoSuchFieldError();
+        }
+        if (index >= size) {
+            size += size / 2;
+            array = newArray();
         }
     }
 
-    private Object[] newArray() {
+    private T[] newArray() {
         Object[] newArray = new Object[size];
         System.arraycopy(array, 0, newArray, 0, position);
-        return newArray;
+        return (T[]) newArray;
     }
 
     @Override
     public void add(T value, int index) {
-        check(index);
+        checkForAdd(index);
         System.arraycopy(array, index, array, index + 1, size - index - 1);
         array[index] = value;
-        size++;
+        position++;
     }
 
     @Override
     public void addAll(List<T> list) {
         Object[] obj = list.toArray();
-        size = array.length;
         array = newArray();
-        System.arraycopy(obj, 0, this.array, 0, obj.length);
+        System.arraycopy(obj, 0, array, 0, obj.length);
     }
 
     @Override
     public T get(int index) {
+        check(index);
         if (position > index) {
             return (T) array[index];
         }
@@ -71,6 +62,7 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public T remove(int index) {
+        check(index);
         size--;
         System.arraycopy(array, index + 1, array, index, size - index);
         return (T) array[index];
@@ -84,6 +76,12 @@ public class MyArrayList<T> implements List<T> {
             }
         }
         return null;
+    }
+    
+    private void check(int index) {
+        if (index < 0 || index > size) {
+            throw new NoSuchFieldError();
+        }
     }
 
     @Override
@@ -100,5 +98,13 @@ public class MyArrayList<T> implements List<T> {
     public Object[] toArray() {
         return array;
     }
-}
 
+    public void printArrayList() {
+        System.out.println("My array list: ");
+        stringBuilder.setLength(0);
+        for (int j = 0; j < size; j++) {
+            stringBuilder.append(array[j]).append(", ");
+        }
+        System.out.println(stringBuilder);
+    }
+}
