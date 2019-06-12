@@ -1,92 +1,89 @@
-package com.company;
+ackage com.company;
+
+import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 public class MyArrayList<T> implements List<T> {
 
-    private static final int DEFAULT_CAPACITY = 10;
+    private final static int DEFAULT_CAPACITY = 10;
+    private T[] array = (T[]) new Object[DEFAULT_CAPACITY];
+    private StringBuilder builder = new StringBuilder();
+    private int sizeOfArray = DEFAULT_CAPACITY;
     private int position = 0;
-    private Object[] array = new Object[DEFAULT_CAPACITY];
-    private StringBuilder stringBuilder = new StringBuilder();
-    private int size = array.length;
 
     @Override
     public void add(T value) {
-        checkForAdd(position);
         add(value, position);
-    }
-
-    private void checkForAdd(int index) {
-        if (index < 0) {
-            throw new NoSuchFieldError();
-        }
-        if (index >= size) {
-            size += size / 2;
-            array = newArray();
-        }
-    }
-
-    private T[] newArray() {
-        Object[] newArray = new Object[size];
-        System.arraycopy(array, 0, newArray, 0, position);
-        return (T[]) newArray;
     }
 
     @Override
     public void add(T value, int index) {
-        checkForAdd(index);
-        System.arraycopy(array, index, array, index + 1, size - index - 1);
-        array[index] = value;
         position++;
+        if (index >= 0) {
+            if (index >= sizeOfArray) {
+                sizeOfArray += DEFAULT_CAPACITY / 2;
+                array = Arrays.copyOf(array, sizeOfArray);
+            }
+            System.arraycopy(array, index, array, index + 1, sizeOfArray - index - 1);
+            array[index] = value;
+        }
     }
 
     @Override
     public void addAll(List<T> list) {
-        Object[] obj = list.toArray();
-        array = newArray();
-        System.arraycopy(obj, 0, array, 0, obj.length);
+        T[] newArray = (T[]) list.toArray();
+        while (newArray.length > sizeOfArray) {
+            sizeOfArray = newArray.length;
+            array = Arrays.copyOf(array, sizeOfArray);
+        }
+        array = Arrays.copyOf(newArray, list.size());
     }
 
     @Override
     public T get(int index) {
-        check(index);
-        if (position > index) {
-            return (T) array[index];
+        if (checkOfIndex(index)) {
+            return array[index];
         }
         return null;
     }
 
     @Override
     public void set(T value, int index) {
-        check(index);
-        array[index] = value;
+        array[index] = checkOfIndex(index) ? value : null;
     }
 
     @Override
     public T remove(int index) {
-        check(index);
-        size--;
-        System.arraycopy(array, index + 1, array, index, size - index);
-        return (T) array[index];
+        if (checkOfIndex(index)) {
+            T removeElem = array[index];
+            System.arraycopy(array, index + 1, array, index, array.length - index - 1);
+            position--;
+            return removeElem;
+        }
+        return null;
     }
 
     @Override
     public T remove(T t) {
-        for (int j = 0; j < size; j++) {
-            if (array[j].equals(t)) {
-                return remove(j);
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].equals(t)) {
+                remove(i);
+                return t;
             }
         }
         return null;
     }
-    
-    private void check(int index) {
-        if (index < 0 || index > size) {
-            throw new NoSuchFieldError();
+
+    private boolean checkOfIndex(int index) {
+        if (index < 0 || index > sizeOfArray) {
+            throw new NoSuchElementException("The index is wrong.");
         }
+        return true;
     }
 
     @Override
     public int size() {
-        return position;
+        return sizeOfArray;
     }
 
     @Override
@@ -101,10 +98,11 @@ public class MyArrayList<T> implements List<T> {
 
     public void printArrayList() {
         System.out.println("My array list: ");
-        stringBuilder.setLength(0);
-        for (int j = 0; j < size; j++) {
-            stringBuilder.append(array[j]).append(", ");
+        builder.setLength(0);
+        for (int j = 0; j < sizeOfArray; j++) {
+            builder.append(array[j]).append(", ");
         }
-        System.out.println(stringBuilder);
+        System.out.println(builder);
     }
 }
+
