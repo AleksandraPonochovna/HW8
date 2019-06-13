@@ -18,7 +18,6 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public void add(T value, int index) {
-        position++;
         if (index >= 0) {
             if (index >= sizeOfArray) {
                 sizeOfArray += DEFAULT_CAPACITY / 2;
@@ -26,6 +25,7 @@ public class MyArrayList<T> implements List<T> {
             }
             System.arraycopy(array, index, array, index + 1, sizeOfArray - index - 1);
             array[index] = value;
+            position++;
         }
     }
 
@@ -33,7 +33,7 @@ public class MyArrayList<T> implements List<T> {
     public void addAll(List<T> list) {
         T[] newArray = (T[]) list.toArray();
         while (newArray.length > sizeOfArray) {
-            sizeOfArray = newArray.length;
+            sizeOfArray += newArray.length;
             array = Arrays.copyOf(array, sizeOfArray);
         }
         array = Arrays.copyOf(newArray, list.size());
